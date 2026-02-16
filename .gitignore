@@ -2,3 +2,5 @@ bharatvote-backend/node_modules
 BharatVoteFrontend/node_modules
 bharatvote-backend/.env
 bharatvote-backend/uploads/*
+BharatVoteFrontend/public/vote-awareness.mp4
+BharatVoteFrontend/dist/vote-awareness.mp4
