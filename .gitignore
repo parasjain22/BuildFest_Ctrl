@@ -1,3 +1,4 @@
 bharatvote-backend/node_modules
 BharatVoteFrontend/node_modules
 bharatvote-backend/.env
+bharatvote-backend/uploads/*
