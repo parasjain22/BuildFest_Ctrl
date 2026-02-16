@@ -1,0 +1,210 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* BharatVote Design System - Indian Civic Identity */
+
+@layer base {
+  :root {
+    /* Indian Tricolor Inspired Palette */
+    --background: 0 0% 97%;
+    --foreground: 220 20% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 15%;
+
+    /* Saffron - Primary */
+    --primary: 30 100% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    /* White/Light Gray - Secondary */
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 220 20% 15%;
+
+    /* Green - Accent (India Green) */
+    --accent: 115 89% 28%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Navy Blue - Trust (Ashoka Chakra) */
+    --trust: 240 100% 40%;
+    --trust-foreground: 0 0% 100%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 10% 45%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 30 100% 60%;
+
+    --radius: 0.5rem;
+
+    /* Gradients */
+    --gradient-saffron: linear-gradient(135deg, hsl(30 100% 60%) 0%, hsl(35 100% 55%) 100%);
+    --gradient-green: linear-gradient(135deg, hsl(115 89% 28%) 0%, hsl(120 80% 35%) 100%);
+    --gradient-tricolor: linear-gradient(180deg, hsl(30 100% 60%) 0%, hsl(0 0% 100%) 50%, hsl(115 89% 28%) 100%);
+    --gradient-trust: linear-gradient(135deg, hsl(240 100% 40%) 0%, hsl(220 90% 50%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(30 100% 60% / 0.1) 0%, hsl(115 89% 28% / 0.1) 100%);
+
+    /* Shadows */
+    --shadow-card: 0 4px 20px -4px hsl(220 20% 15% / 0.08);
+    --shadow-elevated: 0 8px 30px -8px hsl(220 20% 15% / 0.12);
+    --shadow-saffron: 0 4px 20px -4px hsl(30 100% 60% / 0.3);
+    --shadow-green: 0 4px 20px -4px hsl(115 89% 28% / 0.3);
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 220 20% 25%;
+    --sidebar-primary: 30 100% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 220 20% 15%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 30 100% 60%;
+  }
+
+  .dark {
+    --background: 220 20% 10%;
+    --foreground: 0 0% 98%;
+
+    --card: 220 20% 12%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 220 20% 12%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 30 100% 60%;
+    --primary-foreground: 220 20% 10%;
+
+    --secondary: 220 15% 20%;
+    --secondary-foreground: 0 0% 98%;
+
+    --accent: 115 70% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    --trust: 220 90% 60%;
+    --trust-foreground: 0 0% 100%;
+
+    --muted: 220 15% 20%;
+    --muted-foreground: 220 10% 65%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 20%;
+    --input: 220 15% 20%;
+    --ring: 30 100% 60%;
+
+    --sidebar-background: 220 20% 10%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 30 100% 60%;
+    --sidebar-primary-foreground: 220 20% 10%;
+    --sidebar-accent: 220 15% 18%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 220 15% 18%;
+    --sidebar-ring: 30 100% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Noto Sans', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
+
+@layer components {
+  .tricolor-border {
+    border-image: linear-gradient(90deg, hsl(30 100% 60%) 33%, hsl(0 0% 100%) 33%, hsl(0 0% 100%) 66%, hsl(115 89% 28%) 66%) 1;
+  }
+
+  .tricolor-underline {
+    position: relative;
+  }
+
+  .tricolor-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, hsl(30 100% 60%) 33%, hsl(0 0% 85%) 33%, hsl(0 0% 85%) 66%, hsl(115 89% 28%) 66%);
+    border-radius: 2px;
+  }
+
+  .govt-card {
+    @apply bg-card border border-border rounded-lg;
+    box-shadow: var(--shadow-card);
+  }
+
+  .govt-card-elevated {
+    @apply bg-card border border-border rounded-lg;
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .ashoka-chakra {
+    animation: spin 20s linear infinite;
+  }
+
+  .bounce-subtle {
+    animation: bounce-subtle 2s ease-in-out infinite;
+  }
+
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+}
+
+@layer utilities {
+  .text-gradient-saffron {
+    background: linear-gradient(135deg, hsl(30 100% 55%) 0%, hsl(35 100% 50%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-green {
+    background: linear-gradient(135deg, hsl(115 89% 28%) 0%, hsl(120 80% 35%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-hero-pattern {
+    background-image: 
+      radial-gradient(circle at 20% 80%, hsl(30 100% 60% / 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsl(115 89% 28% / 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, hsl(240 100% 40% / 0.03) 0%, transparent 70%);
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}

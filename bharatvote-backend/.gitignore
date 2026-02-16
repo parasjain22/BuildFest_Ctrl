@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Environment variables (NEVER commit)
+.env
+
+# Uploaded files
+uploads/aadhaar/*
+uploads/photos/*
+!uploads/aadhaar/.gitkeep
+!uploads/photos/.gitkeep
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Build
+dist/
+build/

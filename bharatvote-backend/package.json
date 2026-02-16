@@ -1,0 +1,40 @@
+{
+    "name": "bharatvote-backend",
+    "version": "1.0.0",
+    "description": "BharatVote - Secure Digital Voting System Backend",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "node --watch server.js"
+    },
+    "keywords": [
+        "voting",
+        "election",
+        "blockchain",
+        "merkle-tree",
+        "secure",
+        "india"
+    ],
+    "author": "BharatVote Team",
+    "license": "ISC",
+    "dependencies": {
+        "concurrently": "^9.2.1",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.7",
+        "express": "^4.21.2",
+        "express-rate-limit": "^7.5.0",
+        "express-validator": "^7.2.1",
+        "helmet": "^8.0.0",
+        "jsonwebtoken": "^9.0.2",
+        "merkletreejs": "^0.4.0",
+        "mongoose": "^8.9.5",
+        "morgan": "^1.10.0",
+        "multer": "^1.4.5-lts.1",
+        "node-cron": "^3.0.3",
+        "nodemailer": "^6.9.16",
+        "pdfkit": "^0.16.0",
+        "react-otp-input": "^3.1.1",
+        "sharp": "^0.33.5",
+        "uuid": "^11.0.5"
+    }
+}
