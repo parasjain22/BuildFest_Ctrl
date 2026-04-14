@@ -1,13 +1,27 @@
 const crypto = require('crypto');
 
 const ALGORITHM = 'aes-256-cbc';
+const resolveKey = (keyInput) => {
+    const secret = keyInput || process.env.VOTE_ENCRYPTION_KEY;
+
+    if (!secret) {
+        throw new Error('VOTE_ENCRYPTION_KEY is not defined in environment');
+    }
+
+    if (/^[0-9a-fA-F]{64}$/.test(secret)) {
+        return Buffer.from(secret, 'hex');
+    }
+
+    // Allow Render-managed generated secrets or passphrases by deriving a 32-byte key.
+    return crypto.createHash('sha256').update(secret).digest();
+};
 
 /**
  * Encrypt data using AES-256-CBC.
  * Returns { iv, encryptedData } as hex strings.
  */
 const encrypt = (data, keyHex) => {
-    const key = Buffer.from(keyHex || process.env.VOTE_ENCRYPTION_KEY, 'hex');
+    const key = resolveKey(keyHex);
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipheriv(ALGORITHM, key, iv);
     let encrypted = cipher.update(JSON.stringify(data), 'utf8', 'hex');
@@ -22,7 +36,7 @@ const encrypt = (data, keyHex) => {
  * Decrypt AES-256-CBC encrypted data.
  */
 const decrypt = (encryptedData, ivHex, keyHex) => {
-    const key = Buffer.from(keyHex || process.env.VOTE_ENCRYPTION_KEY, 'hex');
+    const key = resolveKey(keyHex);
     const iv = Buffer.from(ivHex, 'hex');
     const decipher = crypto.createDecipheriv(ALGORITHM, key, iv);
     let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
