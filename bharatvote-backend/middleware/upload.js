@@ -1,22 +1,16 @@
-const fs = require('fs');
 const multer = require('multer');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/jpg'];
 const MAX_SIZE = (parseInt(process.env.MAX_FILE_SIZE_MB) || 5) * 1024 * 1024;
-const ensureUploadPath = (...segments) => {
-    const uploadPath = path.join(__dirname, '..', 'uploads', ...segments);
-    fs.mkdirSync(uploadPath, { recursive: true });
-    return uploadPath;
-};
 
 /**
  * Multer storage for Aadhaar card images.
  */
 const aadhaarStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, ensureUploadPath('aadhaar'));
+        cb(null, path.join(__dirname, '..', 'uploads', 'aadhaar'));
     },
     filename: (req, file, cb) => {
         const ext = path.extname(file.originalname);
@@ -29,7 +23,7 @@ const aadhaarStorage = multer.diskStorage({
  */
 const photoStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, ensureUploadPath('photos'));
+        cb(null, path.join(__dirname, '..', 'uploads', 'photos'));
     },
     filename: (req, file, cb) => {
         const ext = path.extname(file.originalname);
@@ -75,7 +69,7 @@ const uploadFaceVerify = multer({
 const uploadComplaintAttachment = multer({
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
-            cb(null, ensureUploadPath());
+            cb(null, path.join(__dirname, '..', 'uploads'));
         },
         filename: (req, file, cb) => {
             const ext = path.extname(file.originalname);

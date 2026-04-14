@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const fs = require('fs');
 const path = require('path');
 const connectDB = require('./config/db');
 const { generalLimiter } = require('./middleware/rateLimiter');
@@ -11,30 +10,16 @@ const { generalLimiter } = require('./middleware/rateLimiter');
 // ============ Initialize Express ============
 const app = express();
 const PORT = process.env.PORT || 5000;
-const frontendDistPath = path.resolve(__dirname, '..', 'BharatVoteFrontend', 'dist');
-const hasBuiltFrontend = fs.existsSync(path.join(frontendDistPath, 'index.html'));
-const localDevOrigins = ['http://localhost:8080', 'http://localhost:5173', 'http://localhost:3000'];
-const configuredOrigins = [
-    process.env.FRONTEND_URL,
-    process.env.FRONTEND_URLS,
-    process.env.RENDER_EXTERNAL_URL,
-]
-    .filter(Boolean)
-    .flatMap((value) => value.split(','))
-    .map((value) => value.trim())
-    .filter(Boolean);
-const allowedOrigins = [...new Set([...localDevOrigins, ...configuredOrigins])];
 
 // ============ Security Middleware ============
 app.use(helmet());
 app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            return callback(null, true);
-        }
-
-        return callback(new Error(`Origin ${origin} not allowed by CORS`));
-    },
+    origin: [
+        process.env.FRONTEND_URL || 'http://localhost:5173',
+        'http://localhost:8080',
+        'http://localhost:5173',
+        'http://localhost:3000',
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -49,11 +34,11 @@ if (process.env.NODE_ENV !== 'production') {
     app.use(morgan('dev'));
 }
 
-// Request logger - prints method, URL, body keys
+// Request logger — prints method, URL, body keys
 app.use((req, res, next) => {
     if (req.method !== 'GET') {
         const bodyKeys = req.body ? Object.keys(req.body) : [];
-        console.log(`[request] ${req.method} ${req.originalUrl} | body keys: [${bodyKeys.join(', ')}]`);
+        console.log(`📨 ${req.method} ${req.originalUrl} | body keys: [${bodyKeys.join(', ')}]`);
     }
     next();
 });
@@ -85,51 +70,34 @@ app.use('/api/complaints', complaintRoutes);
 app.get('/api/health', (req, res) => {
     res.status(200).json({
         status: 'ok',
-        message: 'BharatVote backend is running',
+        message: '🇮🇳 BharatVote Backend is running!',
         version: '1.0.0',
         timestamp: new Date().toISOString(),
         environment: process.env.NODE_ENV || 'development',
     });
 });
 
-if (hasBuiltFrontend) {
-    app.use(express.static(frontendDistPath));
-
-    // Let React Router handle frontend routes in production.
-    app.get('*', (req, res, next) => {
-        if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) {
-            return next();
-        }
-
-        if (!req.accepts('html')) {
-            return next();
-        }
-
-        return res.sendFile(path.join(frontendDistPath, 'index.html'));
+// ============ Root ============
+app.get('/', (req, res) => {
+    res.status(200).json({
+        status: 'ok',
+        message: '🗳️ BharatVote API Server',
+        docs: '/api/health',
+        endpoints: {
+            auth: '/api/auth',
+            vote: '/api/vote',
+            audit: '/api/audit',
+            public: '/api/public',
+            admin: '/api/admin',
+            results: '/api/results',
+            complaints: '/api/complaints',
+        },
     });
-} else {
-    // ============ Root ============
-    app.get('/', (req, res) => {
-        res.status(200).json({
-            status: 'ok',
-            message: 'BharatVote API Server',
-            docs: '/api/health',
-            endpoints: {
-                auth: '/api/auth',
-                vote: '/api/vote',
-                audit: '/api/audit',
-                public: '/api/public',
-                admin: '/api/admin',
-                results: '/api/results',
-                complaints: '/api/complaints',
-            },
-        });
-    });
-}
+});
 
 // ============ 404 Handler ============
 app.use((req, res) => {
-    console.log(`[404] ${req.method} ${req.originalUrl}`);
+    console.log(`⚠️ 404: ${req.method} ${req.originalUrl}`);
     res.status(404).json({
         status: 'error',
         message: `Route ${req.method} ${req.originalUrl} not found`,
@@ -138,7 +106,7 @@ app.use((req, res) => {
 
 // ============ Global Error Handler ============
 app.use((err, req, res, next) => {
-    console.error('[error] Unhandled error:', err);
+    console.error('❌ Unhandled Error:', err);
 
     if (err.code === 'LIMIT_FILE_SIZE') {
         return res.status(413).json({
@@ -154,7 +122,7 @@ app.use((err, req, res, next) => {
         });
     }
 
-    return res.status(err.status || 500).json({
+    res.status(err.status || 500).json({
         status: 'error',
         message: process.env.NODE_ENV === 'production'
             ? 'Internal server error'
@@ -168,23 +136,19 @@ const startServer = async () => {
         await connectDB();
 
         app.listen(PORT, () => {
-            const publicUrl = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
-            const frontendUrl = hasBuiltFrontend
-                ? publicUrl
-                : (process.env.FRONTEND_URL || 'http://localhost:5173');
-
             console.log('');
-            console.log('  BharatVote Backend Server');
-            console.log('  ======================================');
-            console.log(`  Port:        ${PORT}`);
-            console.log(`  Environment: ${process.env.NODE_ENV || 'development'}`);
-            console.log(`  Frontend:    ${frontendUrl}`);
-            console.log(`  API:         ${publicUrl}/api/health`);
-            console.log('  ======================================');
+            console.log('  🗳️  ══════════════════════════════════════');
+            console.log('  🇮🇳  BharatVote Backend Server');
+            console.log('  ══════════════════════════════════════');
+            console.log(`  🚀  Port:        ${PORT}`);
+            console.log(`  🌍  Environment: ${process.env.NODE_ENV || 'development'}`);
+            console.log(`  🔗  Frontend:    ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
+            console.log(`  📡  API:         http://localhost:${PORT}/api/health`);
+            console.log('  ══════════════════════════════════════');
             console.log('');
         });
     } catch (error) {
-        console.error('[startup] Failed to start server:', error.message);
+        console.error('❌ Failed to start server:', error.message);
         process.exit(1);
     }
 };
